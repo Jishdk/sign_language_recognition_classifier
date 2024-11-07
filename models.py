@@ -22,21 +22,30 @@ class SignNN(nn.Module):
     def forward(self, x):
         return self.network(x)
 
+from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score, confusion_matrix
+
 class SignClassifier:
     def evaluate(self, X_test: np.ndarray, y_test: np.ndarray) -> Dict:
         y_pred = self.predict(X_test)
-        accuracy = np.mean(y_pred == y_test)
         
-        # Ensure we have all classes represented in confusion matrix
+        # Compute accuracy, precision, recall, and F1
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+        
+        # Compute confusion matrix
         max_class = max(np.max(y_test), np.max(y_pred))
-        conf_matrix = np.zeros((max_class + 1, max_class + 1), dtype=int)
-        for true, pred in zip(y_test, y_pred):
-            conf_matrix[true][pred] += 1
+        conf_matrix = confusion_matrix(y_test, y_pred, labels=range(max_class + 1))
         
         return {
             'accuracy': accuracy,
+            'precision': precision,
+            'recall': recall,
+            'f1': f1,
             'confusion_matrix': conf_matrix
         }
+
 
 class RandomForest(SignClassifier):
     def __init__(self, n_trees: int = 100):

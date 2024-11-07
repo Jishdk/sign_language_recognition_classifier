@@ -21,6 +21,42 @@ class Evaluator:
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(exist_ok=True)
     
+    def plot_metrics_comparison(self, rf_metrics: Dict, nn_metrics: Dict):
+        """
+        Plot and save a comparison of accuracy, recall, and F1 score for Random Forest and Neural Network.
+        
+        Args:
+            rf_metrics: Dictionary containing Random Forest metrics
+            nn_metrics: Dictionary containing Neural Network metrics
+        """
+        metrics = ['accuracy', 'recall', 'f1']
+        rf_values = [rf_metrics[m] for m in metrics]
+        nn_values = [nn_metrics[m] for m in metrics]
+        
+        x = np.arange(len(metrics))  # the label locations
+        width = 0.35  # the width of the bars
+
+        plt.figure(figsize=(10, 6))
+        plt.bar(x - width/2, rf_values, width, label='Random Forest')
+        plt.bar(x + width/2, nn_values, width, label='Neural Network')
+
+        # Add labels, title, and custom x-axis tick labels
+        plt.ylabel('Scores')
+        plt.title('Metrics Comparison for Random Forest and Neural Network')
+        plt.xticks(x, ['Accuracy', 'Recall', 'F1 Score'])
+        plt.legend()
+
+        # Add value labels
+        for i, v in enumerate(rf_values):
+            plt.text(i - width/2, v + 0.01, f'{v:.2f}', ha='center')
+        for i, v in enumerate(nn_values):
+            plt.text(i + width/2, v + 0.01, f'{v:.2f}', ha='center')
+
+        plt.tight_layout()
+        plt.savefig(self.save_dir / f'{self.model_name.lower()}_metrics_comparison.png')
+        plt.show()
+        plt.close()
+    
     def plot_confusion_matrix(self, conf_matrix: np.ndarray, labels: List[str]):
         """
         Plot and save confusion matrix.
@@ -39,38 +75,6 @@ class Evaluator:
         plt.savefig(self.save_dir / f'{self.model_name.lower()}_confusion_matrix.png')
         plt.close()
     
-    def plot_training_history(self, history: Dict):
-        """
-        Plot training history for neural network.
-        
-        Args:
-            history: Dictionary containing training metrics
-        """
-        plt.figure(figsize=(12, 4))
-        
-        # Plot loss
-        plt.subplot(1, 2, 1)
-        plt.plot(history['train_loss'], label='Training Loss')
-        if 'val_loss' in history:
-            plt.plot(history['val_loss'], label='Validation Loss')
-        plt.title('Model Loss')
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
-        plt.legend()
-        
-        # Plot accuracy
-        plt.subplot(1, 2, 2)
-        plt.plot(history['train_acc'], label='Training Accuracy')
-        if 'val_acc' in history:
-            plt.plot(history['val_acc'], label='Validation Accuracy')
-        plt.title('Model Accuracy')
-        plt.xlabel('Epoch')
-        plt.ylabel('Accuracy')
-        plt.legend()
-        
-        plt.tight_layout()
-        plt.savefig(self.save_dir / f'{self.model_name.lower()}_training_history.png')
-        plt.close()
 
 class StressTester:
     """Class for stress testing sign language recognition models."""
@@ -80,7 +84,7 @@ class StressTester:
         Initialize stress tester.
         
         Args:
-            model: Model to test (should have predict method)
+            model: Model to test
         """
         self.model = model
     

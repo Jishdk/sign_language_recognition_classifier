@@ -13,18 +13,17 @@ from models import RandomForest, NeuralNetwork
 from evaluation import Evaluator, StressTester
 
 def main():
-    """Main function to run the sign language recognition project."""
     
-    # Step 1: Initialize Configuration
+    # Initialize Configuration
     print("\n1. Setting up project...")
     config = Config()
     DataUtils.create_folders(config.BASE_DIR)
     
-    # Step 2: Initialize Hand Detector
+    # Initialize Hand Detector
     print("\n2. Initializing hand detector...")
     hand_detector = HandDetector(**config.MEDIAPIPE_PARAMS)
     
-    # Step 3: Load and Process Dataset
+    # Load and Process Dataset
     print("\n3. Loading and processing dataset...")
     dataset = SignLanguageDataset(str(config.DATA_DIR), hand_detector)
     
@@ -38,7 +37,7 @@ def main():
     for split_name, (X, y) in data_splits.items():
         print(f"{split_name} split shape: {X.shape}")
     
-    # Step 4: Prepare Data and Train Models
+    # Prepare Data and Train Models
     print("\n4. Training models...")
     
     # Shift labels to start from 0
@@ -49,8 +48,9 @@ def main():
         
     # Get number of classes
     num_classes = len(np.unique(data_splits['train'][1]))
-    print(f"\nNumber of classes: {num_classes}")
-    print(f"Label range: 0-{num_classes-1}")
+
+    # Define class labels based on number of classes
+    class_labels = [chr(ord('A') + i) for i in range(num_classes)]
     
     # Random Forest
     print("\nTraining Random Forest...")
@@ -75,28 +75,31 @@ def main():
         num_epochs=config.NN_PARAMS['num_epochs']
     )
     
-    # Step 5: Evaluate Models
+    # Evaluate Models
     print("\n5. Evaluating models...")
-    
+
     # Initialize evaluators
     rf_evaluator = Evaluator("Random Forest", str(config.RESULTS_DIR))
     nn_evaluator = Evaluator("Neural Network", str(config.RESULTS_DIR))
-    
+
     # Get predictions and metrics
     rf_metrics = rf_model.evaluate(data_splits['test'][0], data_splits['test'][1])
     nn_metrics = nn_model.evaluate(data_splits['test'][0], data_splits['test'][1])
-    
-    # Create class labels (shift back for display)
-    class_labels = [chr(ord('A') + i) for i in range(num_classes)]
-    
+
+    # Display results
+    print(f"Random Forest Metrics:\nAccuracy: {rf_metrics['accuracy']:.4f}\n"
+        f"Precision: {rf_metrics['precision']:.4f}\nRecall: {rf_metrics['recall']:.4f}\n"
+        f"F1 Score: {rf_metrics['f1']:.4f}\n")
+    print(f"Neural Network Metrics:\nAccuracy: {nn_metrics['accuracy']:.4f}\n"
+        f"Precision: {nn_metrics['precision']:.4f}\nRecall: {nn_metrics['recall']:.4f}\n"
+        f"F1 Score: {nn_metrics['f1']:.4f}")
+
     # Plot confusion matrices
     rf_evaluator.plot_confusion_matrix(rf_metrics['confusion_matrix'], class_labels)
     nn_evaluator.plot_confusion_matrix(nn_metrics['confusion_matrix'], class_labels)
+
     
-    # Plot neural network training history
-    nn_evaluator.plot_training_history(nn_history)
-    
-    # Step 6: Stress Testing
+    # Stress Testing
     print("\n6. Running stress tests...")
     
     # Test both models
@@ -127,7 +130,7 @@ def main():
             save_path = config.RESULTS_DIR / f'{model_name}_{test_type}_results.png'
             rf_stress.plot_results(results, f'{test_type.replace("_", " ").title()} Results', str(save_path))
     
-    # Step 7: Save Results
+    # Save Results
     print("\n7. Saving results...")
     
     # Combine all results
@@ -151,7 +154,7 @@ def main():
     # Save results
     DataUtils.save_results(final_results, str(config.RESULTS_DIR / 'final_results.json'))
     
-    # Create model comparison plot
+    # Create model comparison plot for Accuracy, Recall, and F1 Score
     Visualizer.plot_model_comparison(
         {
             'Random Forest': rf_metrics,
@@ -159,6 +162,7 @@ def main():
         },
         str(config.RESULTS_DIR / 'model_comparison.png')
     )
+
     
     print("\nProject completed successfully!")
     print(f"Results saved in: {config.RESULTS_DIR}")

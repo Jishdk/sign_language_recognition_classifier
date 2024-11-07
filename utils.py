@@ -4,7 +4,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 class DataUtils:
     """Utility functions for data handling and visualization."""
@@ -12,26 +12,14 @@ class DataUtils:
     @staticmethod
     def create_folders(base_path: str):
         """
-        Create necessary folders for the project.
+        Create the results folder for the project.
         
         Args:
             base_path: Base directory path
         """
-        # Define required folders
-        folders = [
-            'data',
-            'results',
-            'results',
-            'logs'
-        ]
-        
-        # Create each folder
-        for folder in folders:
-            Path(base_path).joinpath(folder).mkdir(parents=True, exist_ok=True)
-            
-        print("Created project folders:")
-        for folder in folders:
-            print(f"  - {folder}")
+        # Define and create the results folder
+        results_path = Path(base_path).joinpath('results')
+        results_path.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
     def save_results(results: Dict, filepath: str):
@@ -67,76 +55,50 @@ class Visualizer:
     """Utility functions for visualization."""
     
     @staticmethod
-    def plot_learning_curves(history: Dict, save_path: str = None):
-        """
-        Plot training and validation curves.
-        
-        Args:
-            history: Dictionary containing training history
-            save_path: Path to save the plot (optional)
-        """
-        plt.figure(figsize=(12, 4))
-        
-        # Plot loss
-        plt.subplot(1, 2, 1)
-        plt.plot(history['train_loss'], label='Training')
-        if 'val_loss' in history:
-            plt.plot(history['val_loss'], label='Validation')
-        plt.title('Loss Over Time')
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
-        plt.legend()
-        
-        # Plot accuracy
-        plt.subplot(1, 2, 2)
-        plt.plot(history['train_acc'], label='Training')
-        if 'val_acc' in history:
-            plt.plot(history['val_acc'], label='Validation')
-        plt.title('Accuracy Over Time')
-        plt.xlabel('Epoch')
-        plt.ylabel('Accuracy')
-        plt.legend()
-        
-        plt.tight_layout()
-        
-        if save_path:
-            plt.savefig(save_path)
-            print(f"Learning curves saved to: {save_path}")
-        else:
-            plt.show()
-        
-        plt.close()
-    
-    @staticmethod
     def plot_model_comparison(models_results: Dict, save_path: str = None):
         """
-        Plot comparison of model performances.
+        Plot comparison of model performances including accuracy, recall, F1 score, and precision.
         
         Args:
             models_results: Dictionary containing results for each model
             save_path: Path to save the plot (optional)
         """
-        # Extract metrics
-        models = list(models_results.keys())
-        accuracies = [results['accuracy'] for results in models_results.values()]
+        # Metrics to include in comparison
+        metrics = ['accuracy', 'precision', 'recall', 'f1']
+        model_names = list(models_results.keys())
+
+        # Extract metric values for each model
+        metric_values = {metric: [models_results[model][metric] for model in model_names] for metric in metrics}
         
-        # Create bar plot
-        plt.figure(figsize=(8, 6))
-        bars = plt.bar(models, accuracies)
+        # Set up bar plot with grouped bars for each metric
+        x = np.arange(len(metrics))
+        width = 0.35
+
+        plt.figure(figsize=(12, 7))
+
+        # Plot bars for each model
+        for i, model_name in enumerate(model_names):
+            plt.bar(x + i * width, [metric_values[metric][i] for metric in metrics], width, label=model_name)
+        
+        # Set x-axis to metric names
+        plt.xticks(x + width / 2, [metric.capitalize() for metric in metrics])
+
+        # Add labels and title
+        plt.ylabel('Scores')
         plt.title('Model Performance Comparison')
-        plt.ylabel('Accuracy')
         
-        # Add value labels on bars
-        for bar in bars:
-            height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width()/2., height,
-                    f'{height:.2%}',
-                    ha='center', va='bottom')
-        
-        plt.ylim(0, 1.1)  # Set y-axis limit to accommodate labels
-        
+        # Move the legend outside the plot
+        plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+
+        # Display values on top of each bar
+        for i, model_name in enumerate(model_names):
+            for j, metric in enumerate(metrics):
+                plt.text(x[j] + i * width, metric_values[metric][i] + 0.01, 
+                         f"{metric_values[metric][i]:.2f}", ha='center', va='bottom')
+
+        # Save or show the plot
         if save_path:
-            plt.savefig(save_path)
+            plt.savefig(save_path, bbox_inches='tight')
             print(f"Model comparison plot saved to: {save_path}")
         else:
             plt.show()

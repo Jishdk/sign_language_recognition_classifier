@@ -1,16 +1,13 @@
-# config.py
-
 from pathlib import Path
 
 class Config:
     """Configuration settings for sign language recognition project."""
     
     def __init__(self):
-        # Base paths
-        self.BASE_DIR = Path("/mnt/c/Users/jishn/Onedrive/Bureaublad/Master AI/KTAI/Group Assignment")
+        # Dynamically set BASE_DIR based on the location of config.py
+        self.BASE_DIR = Path(__file__).resolve().parent 
         self.DATA_DIR = self.BASE_DIR / "data"
         self.RESULTS_DIR = self.BASE_DIR / "results"
-        self.LOGS_DIR = self.BASE_DIR / "logs"
         
         # Data split ratios
         self.TRAIN_SPLIT = 0.7
@@ -54,8 +51,8 @@ class Config:
         print("\nDirectories:")
         print(f"Base Directory: {self.BASE_DIR}")
         print(f"Data Directory: {self.DATA_DIR}")
-        print(f"Models Directory: {self.MODELS_DIR}")
         print(f"Results Directory: {self.RESULTS_DIR}")
+        print(f"Logs Directory: {self.LOGS_DIR}")
         
         print("\nData Splits:")
         print(f"Training: {self.TRAIN_SPLIT:.1%}")
