@@ -1,17 +1,13 @@
-# sign_language_recognition_classifier
-Group assignment 
-# Sign Language Alphabet Recognition
-
-A machine learning system for recognizing sign language alphabets using hand landmark detection.
+# American Sign Language (ASL) Alphabet Recognition
 
 ## Project Overview
 
-This project implements a sign language recognition system using hand landmark detection and machine learning. It compares the performance of two different classifiers (Random Forest and Neural Network) and includes comprehensive evaluation and stress testing.
+This project implements a ASL Alphabet recognition system using hand landmark detection and machine learning. It compares the performance of two different classifiers (Random Forest and Neural Network) and includes comprehensive evaluation and stress testing.
 
 ## Features
 
 * Hand landmark detection using MediaPipe
-* Support for multiple machine learning models:
+* Support for multiple models:
   - Random Forest Classifier
   - Neural Network
 * Comprehensive evaluation system
@@ -20,20 +16,14 @@ This project implements a sign language recognition system using hand landmark d
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone [repository-url]
-cd sign-language-recognition
+1. Create and activate virtual environment:
 ```
-
-2. Create and activate virtual environment:
-```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 ```
 
 3. Install dependencies:
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -56,13 +46,13 @@ The project expects data in COCO format with the following structure:
 ```
 data/
 ├── train/
-│   ├── images/
+│   ├── .jpg
 │   └── _annotations.coco.json
 ├── valid/
-│   ├── images/
+│   ├── .jpg
 │   └── _annotations.coco.json
 └── test/
-    ├── images/
+    ├──  .jpg
     └── _annotations.coco.json
 ```
 
@@ -70,7 +60,7 @@ data/
 
 1. Configure settings in `config.py`
 2. Run the main script:
-```bash
+```
 python main.py
 ```
 
@@ -95,23 +85,8 @@ The system evaluates models on:
   - Noise resistance
   - Feature dropout
 
-## Development
 
-### Adding New Models
-
-1. Inherit from `SignClassifier` in models.py
-2. Implement required methods:
-   - `train()`
-   - `predict()`
-   - `evaluate()`
-
-### Adding Stress Tests
-
-1. Add new test method in `StressTester` class
-2. Update `run_all_tests()` to include new test
-3. Add visualization for new test results
-
-## Dependencies
+## Dependencies (requirements.txt)
 
 * numpy
 * opencv-python
@@ -138,7 +113,5 @@ The system evaluates models on:
 
 ## Authors
 
-Evi Marije
-Jishnu Harinandansingh
-
-
+Evi Dille
+Jishnu Harinandansing
