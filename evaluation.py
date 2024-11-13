@@ -21,42 +21,6 @@ class Evaluator:
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(exist_ok=True)
     
-    def plot_metrics_comparison(self, rf_metrics: Dict, nn_metrics: Dict):
-        """
-        Plot and save a comparison of accuracy, recall, and F1 score for Random Forest and Neural Network.
-        
-        Args:
-            rf_metrics: Dictionary containing Random Forest metrics
-            nn_metrics: Dictionary containing Neural Network metrics
-        """
-        metrics = ['accuracy', 'recall', 'f1']
-        rf_values = [rf_metrics[m] for m in metrics]
-        nn_values = [nn_metrics[m] for m in metrics]
-        
-        x = np.arange(len(metrics))  # the label locations
-        width = 0.35  # the width of the bars
-
-        plt.figure(figsize=(10, 6))
-        plt.bar(x - width/2, rf_values, width, label='Random Forest')
-        plt.bar(x + width/2, nn_values, width, label='Neural Network')
-
-        # Add labels, title, and custom x-axis tick labels
-        plt.ylabel('Scores')
-        plt.title('Metrics Comparison for Random Forest and Neural Network')
-        plt.xticks(x, ['Accuracy', 'Recall', 'F1 Score'])
-        plt.legend()
-
-        # Add value labels
-        for i, v in enumerate(rf_values):
-            plt.text(i - width/2, v + 0.01, f'{v:.2f}', ha='center')
-        for i, v in enumerate(nn_values):
-            plt.text(i + width/2, v + 0.01, f'{v:.2f}', ha='center')
-
-        plt.tight_layout()
-        plt.savefig(self.save_dir / f'{self.model_name.lower()}_metrics_comparison.png')
-        plt.show()
-        plt.close()
-    
     def plot_confusion_matrix(self, conf_matrix: np.ndarray, labels: List[str]):
         """
         Plot and save confusion matrix.
@@ -192,7 +156,7 @@ class StressTester:
             title: Plot title
             save_path: Path to save plot
         """
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(15, 10))
         
         # Extract values
         conditions = list(results.keys())
@@ -202,14 +166,15 @@ class StressTester:
         plt.bar(conditions, accuracies)
         plt.title(title)
         plt.ylabel('Accuracy')
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45, fontsize=24)
+        plt.yticks(fontsize=24)
         
         # Add value labels
         for i, v in enumerate(accuracies):
-            plt.text(i, v + 0.01, f'{v:.3f}', ha='center')
+            plt.text(i, v + 0.01, f'{v:.3f}', ha='center', fontsize=24)
         
         plt.tight_layout()
-        plt.savefig(save_path)
+        plt.savefig(save_path, dpi=300)
         plt.close()
 
     

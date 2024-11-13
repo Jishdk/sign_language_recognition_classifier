@@ -84,16 +84,16 @@ class Visualizer:
         
         # Customize axis labels and title
         plt.xticks(x + width / 2, [metric.capitalize() for metric in metrics],
-                fontsize=18, rotation=0)  
-        plt.yticks(fontsize=18) 
+                fontsize=24, rotation=0)  
+        plt.yticks(fontsize=24) 
         
         # Add labels and title
-        plt.ylabel('Scores', fontsize=18, labelpad=15)  
-        plt.xlabel('Metrics', fontsize=18, labelpad=15) 
-        plt.title('Model Performance Comparison', fontsize=20, pad=20) 
+        plt.ylabel('Scores', fontsize=24, labelpad=15)  
+        plt.xlabel('Metrics', fontsize=24, labelpad=15) 
+        plt.title('Model Performance Comparison', fontsize=24, pad=20) 
         
         # Move the legend outside the plot
-        plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=12)
+        plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=18)
         
         # Display values on top of each bar
         for i, model_name in enumerate(model_names):
