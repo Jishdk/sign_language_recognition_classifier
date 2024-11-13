@@ -156,7 +156,7 @@ class StressTester:
             title: Plot title
             save_path: Path to save plot
         """
-        plt.figure(figsize=(15, 10))
+        plt.figure(figsize=(20, 15))
         
         # Extract values
         conditions = list(results.keys())
@@ -164,14 +164,14 @@ class StressTester:
         
         # Create bar plot
         plt.bar(conditions, accuracies)
-        plt.title(title)
+        plt.title(title, fontsize=26)
         plt.ylabel('Accuracy')
-        plt.xticks(rotation=45, fontsize=24)
-        plt.yticks(fontsize=24)
+        plt.xticks(rotation=45, fontsize=26)
+        plt.yticks(fontsize=26)
         
         # Add value labels
         for i, v in enumerate(accuracies):
-            plt.text(i, v + 0.01, f'{v:.3f}', ha='center', fontsize=24)
+            plt.text(i, v + 0.01, f'{v:.3f}', ha='center', fontsize=26)
         
         plt.tight_layout()
         plt.savefig(save_path, dpi=300)
