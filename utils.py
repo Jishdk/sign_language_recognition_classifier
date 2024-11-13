@@ -73,7 +73,7 @@ class Visualizer:
         
         # Set up bar plot with grouped bars for each metric
         x = np.arange(len(metrics))
-        width = 0.35
+        width = 0.45
         plt.figure(figsize=(15, 10))
         plt.tight_layout()
         
@@ -84,13 +84,13 @@ class Visualizer:
         
         # Customize axis labels and title
         plt.xticks(x + width / 2, [metric.capitalize() for metric in metrics],
-                fontsize=14, rotation=0)  
-        plt.yticks(fontsize=14) 
+                fontsize=18, rotation=0)  
+        plt.yticks(fontsize=18) 
         
         # Add labels and title
-        plt.ylabel('Scores', fontsize=16, labelpad=15)  
-        plt.xlabel('Metrics', fontsize=16, labelpad=15) 
-        plt.title('Model Performance Comparison', fontsize=18, pad=20) 
+        plt.ylabel('Scores', fontsize=18, labelpad=15)  
+        plt.xlabel('Metrics', fontsize=18, labelpad=15) 
+        plt.title('Model Performance Comparison', fontsize=20, pad=20) 
         
         # Move the legend outside the plot
         plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=12)
