@@ -66,39 +66,49 @@ class Visualizer:
         # Metrics to include in comparison
         metrics = ['accuracy', 'precision', 'recall', 'f1']
         model_names = list(models_results.keys())
-
+        
         # Extract metric values for each model
-        metric_values = {metric: [models_results[model][metric] for model in model_names] for metric in metrics}
+        metric_values = {metric: [models_results[model][metric] for model in model_names] 
+                        for metric in metrics}
         
         # Set up bar plot with grouped bars for each metric
         x = np.arange(len(metrics))
         width = 0.35
-
-        plt.figure(figsize=(12, 7))
-
+        plt.figure(figsize=(15, 10))
+        plt.tight_layout()
+        
         # Plot bars for each model
         for i, model_name in enumerate(model_names):
-            plt.bar(x + i * width, [metric_values[metric][i] for metric in metrics], width, label=model_name)
+            plt.bar(x + i * width, [metric_values[metric][i] for metric in metrics], 
+                    width, label=model_name)
         
-        # Set x-axis to metric names
-        plt.xticks(x + width / 2, [metric.capitalize() for metric in metrics])
-
+        # Customize axis labels and title
+        plt.xticks(x + width / 2, [metric.capitalize() for metric in metrics],
+                fontsize=14, rotation=0)  
+        plt.yticks(fontsize=14) 
+        
         # Add labels and title
-        plt.ylabel('Scores')
-        plt.title('Model Performance Comparison')
+        plt.ylabel('Scores', fontsize=16, labelpad=15)  
+        plt.xlabel('Metrics', fontsize=16, labelpad=15) 
+        plt.title('Model Performance Comparison', fontsize=18, pad=20) 
         
         # Move the legend outside the plot
-        plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
-
+        plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=12)
+        
         # Display values on top of each bar
         for i, model_name in enumerate(model_names):
             for j, metric in enumerate(metrics):
                 plt.text(x[j] + i * width, metric_values[metric][i] + 0.01, 
-                         f"{metric_values[metric][i]:.2f}", ha='center', va='bottom')
-
-        # Save or show the plot
+                        f"{metric_values[metric][i]:.2f}",
+                        ha='center', va='bottom',
+                        fontsize=12)
+        
+        # Save
         if save_path:
-            plt.savefig(save_path, bbox_inches='tight')
+            plt.savefig(save_path, 
+                        bbox_inches='tight', 
+                        dpi=300,  
+                        pad_inches=0.5)
             print(f"Model comparison plot saved to: {save_path}")
         else:
             plt.show()
