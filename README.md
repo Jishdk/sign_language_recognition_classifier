@@ -79,6 +79,9 @@ Results are saved in the configured results directory.
 
 The system evaluates models on:
 * Accuracy
+* F1 score
+* Recall 
+* Precision 
 * Confusion matrix
 * Stress test performance:
   - Scale variation
@@ -96,22 +99,8 @@ The system evaluates models on:
 * matplotlib
 * pandas
 
-## Limitations
-
-* Designed for single-hand gestures
-* Requires good lighting conditions
-* Limited to static gestures
-
-## Future Improvements
-
-* Support for dynamic gestures
-* Real-time recognition
-* Multiple hand support
-* Additional model architectures
-* More comprehensive stress tests
-
-
 ## Authors
 
 Evi Dille
 Jishnu Harinandansing
+
