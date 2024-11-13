@@ -154,7 +154,7 @@ def main():
     # Save results
     DataUtils.save_results(final_results, str(config.RESULTS_DIR / 'final_results.json'))
     
-    # Create model comparison plot for Accuracy, Recall, and F1 Score
+    # Create model comparison plot for Accuracy, Recall, Precision and F1 Score
     Visualizer.plot_model_comparison(
         {
             'Random Forest': rf_metrics,

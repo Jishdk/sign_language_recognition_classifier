@@ -1,7 +1,7 @@
 from pathlib import Path
 
 class Config:
-    """Configuration settings for sign language recognition project."""
+    """Configuration settings"""
     
     def __init__(self):
         # Dynamically set BASE_DIR based on the location of config.py
@@ -36,7 +36,7 @@ class Config:
             'min_tracking_confidence': 0.5         # Minimum confidence for tracking
         }
         
-        # Visualization settings
+        # Visualization settings 
         self.VIS_PARAMS = {
             'fig_size': (12, 8),           # Default figure size
             'font_size': 12,               # Default font size

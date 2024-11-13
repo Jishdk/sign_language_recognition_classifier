@@ -7,7 +7,7 @@ from typing import Dict, List
 from pathlib import Path
 
 class Evaluator:
-    """Class for evaluating sign language recognition models."""
+    """Class for evaluating models."""
     
     def __init__(self, model_name: str, save_dir: str = 'results'):
         """
@@ -41,7 +41,7 @@ class Evaluator:
     
 
 class StressTester:
-    """Class for stress testing sign language recognition models."""
+    """Class for stress testing models."""
     
     def __init__(self, model):
         """

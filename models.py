@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from typing import Dict, Tuple
 
 class SignNN(nn.Module):
-    """Neural Network for sign language recognition."""
+    """Neural Network"""
     
     def __init__(self, input_size: int, hidden_size: int, num_classes: int):
         super().__init__()
